@@ -1,38 +1,49 @@
-// ====== views/quiz/index.ejs ======
-/*
 <div class="quiz-container">
     <form action="/quiz/submit" method="POST" class="quiz-form">
         <div class="quiz-header">
-            <h2>English Vocabulary Quiz</h2>
-            <p>Answer all questions and submit your results.</p>
+            <h2>📝 English Vocabulary Quiz</h2>
+            <p>Find the closest easier synonym for each word. Answer all questions and submit your results.</p>
+            <div class="quiz-info">
+                <span class="quiz-badge">🎯 <%= questions.length %> Questions</span>
+                <span class="quiz-badge">⏱️ No Time Limit</span>
+            </div>
         </div>
         
         <div class="user-info">
             <div class="form-group">
-                <label for="name">First Name</label>
-                <input type="text" id="name" name="name" required>
+                <label for="name">📛 First Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your first name">
             </div>
             <div class="form-group">
-                <label for="surname">Last Name</label>
-                <input type="text" id="surname" name="surname" required>
+                <label for="surname">👤 Last Name</label>
+                <input type="text" id="surname" name="surname" required placeholder="Enter your last name">
             </div>
         </div>
 
         <div class="questions-container">
             <% questions.forEach(function(question, index) { %>
-                <div class="quiz-question">
-                    <h3>Question <%= index + 1 %></h3>
-                    <p class="question-text"><strong><%= question.question %></strong></p>
+                <div class="quiz-question" data-question="<%= index + 1 %>">
+                    <div class="question-header">
+                        <h3>Question <%= index + 1 %> of <%= questions.length %></h3>
+                        <div class="word-highlight">
+                            Word: <strong>"<%= question.word %>"</strong>
+                        </div>
+                    </div>
+                    <p class="question-text"><%= question.question %></p>
                     <div class="options">
-                        <% question.options.forEach(function(option) { %>
+                        <% question.options.forEach(function(option, optionIndex) { %>
                             <label class="option-label">
                                 <input 
                                     type="radio" 
                                     name="question_<%= index %>" 
                                     value="<%= option %>" 
+                                    id="q<%= index %>_o<%= optionIndex %>"
                                     required
                                 >
-                                <span><%= option %></span>
+                                <span class="option-text">
+                                    <span class="option-letter"><%= String.fromCharCode(65 + optionIndex) %>)</span>
+                                    <%= option %>
+                                </span>
                             </label>
                         <% }); %>
                     </div>
@@ -40,7 +51,326 @@
             <% }); %>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-large">Submit Quiz</button>
+        <div class="quiz-footer">
+            <div class="progress-indicator">
+                <span id="progress-text">Complete all questions to submit</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" id="submit-btn">
+                🚀 Submit Quiz
+            </button>
+        </div>
     </form>
 </div>
-*/
+
+<style>
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.quiz-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-header h2 {
+    margin: 0 0 1rem 0;
+    font-size: 2.2em;
+}
+
+.quiz-header p {
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+    font-size: 1.1em;
+}
+
+.quiz-info {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quiz-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.user-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px solid #e1e8ed;
+}
+
+.quiz-question {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    border: 2px solid #e1e8ed;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.quiz-question:hover {
+    border-color: #667eea;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.question-header h3 {
+    color: #3b82f6;
+    margin: 0;
+    font-size: 1.3em;
+}
+
+.word-highlight {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.question-text {
+    margin-bottom: 1.5rem;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.options {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e5e7eb;
+    background: #fafbfc;
+}
+
+.option-label:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    transform: translateX(4px);
+}
+
+.option-label input[type="radio"]:checked + .option-text {
+    color: #1e40af;
+    font-weight: 600;
+}
+
+.option-label:has(input:checked) {
+    background: #dbeafe;
+    border-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.option-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 1rem;
+    margin-bottom: 0;
+    accent-color: #3b82f6;
+}
+
+.option-text {
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+    line-height: 1.4;
+}
+
+.option-letter {
+    background: #6b7280;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-right: 0.75rem;
+    transition: background-color 0.3s ease;
+}
+
+.option-label:has(input:checked) .option-letter {
+    background: #2563eb;
+}
+
+.quiz-footer {
+    text-align: center;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 2px solid #e1e8ed;
+    margin-top: 2rem;
+}
+
+.progress-indicator {
+    margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #34d399);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+#progress-text {
+    font-weight: 500;
+    color: #6b7280;
+    font-size: 1.1em;
+}
+
+#submit-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1.2em;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+#submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+}
+
+#submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    .user-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .question-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .quiz-info {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .option-text {
+        font-size: 1em;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.quiz-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const totalQuestions = <%= questions.length %>;
+    
+    // Track progress
+    function updateProgress() {
+        const answeredQuestions = form.querySelectorAll('input[type="radio"]:checked').length;
+        const percentage = (answeredQuestions / totalQuestions) * 100;
+        
+        progressFill.style.width = percentage + '%';
+        
+        if (answeredQuestions === 0) {
+            progressText.textContent = 'Complete all questions to submit';
+            submitBtn.disabled = true;
+        } else if (answeredQuestions === totalQuestions) {
+            progressText.textContent = '🎉 All questions completed! Ready to submit.';
+            submitBtn.disabled = false;
+        } else {
+            progressText.textContent = `${answeredQuestions}/${totalQuestions} questions completed`;
+            submitBtn.disabled = true;
+        }
+    }
+    
+    // Add event listeners to all radio buttons
+    form.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', updateProgress);
+    });
+    
+    // Initial progress check
+    updateProgress();
+    
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        const name = form.querySelector('input[name="name"]').value.trim();
+        const surname = form.querySelector('input[name="surname"]').value.trim();
+        
+        if (!name || !surname) {
+            e.preventDefault();
+            alert('Please enter both first name and last name');
+            return;
+        }
+        
+        const answeredQuestions = form.querySelectorAll('input[type="radio"]:checked').length;
+        if (answeredQuestions !== totalQuestions) {
+            e.preventDefault();
+            alert(`Please answer all ${totalQuestions} questions before submitting`);
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '⏳ Submitting Quiz...';
+    });
+});
+</script>

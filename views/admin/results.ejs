@@ -1,82 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .results-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .results-header h2 {
+            margin: 0 0 1rem 0;
+            font-size: 2.5em;
+        }
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .results-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .results-table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .score-badge {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+        }
+        .percentage-badge.excellent {
+            background: rgba(5,150,105,0.15);
+            color: #065f46;
+        }
+        .percentage-badge.good {
+            background: rgba(217,119,6,0.15);
+            color: #92400e;
+        }
+        .percentage-badge.poor {
+            background: rgba(220,38,38,0.15);
+            color: #991b1b;
+        }
+        .details-row {
+            background: #f9fafb !important;
+        }
+        .detailed-results {
+            padding: 2rem;
+            background: white;
+            margin: 1rem;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-outline {
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+            background: white;
+        }
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        .btn-small {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
 <div class="results-container">
     <div class="results-header">
-        <h2>Quiz Results</h2>
-        <p>Total submissions: <strong><%= results.length %></strong></p>
+        <h2>📊 Quiz Results Dashboard</h2>
+        <div class="results-stats">
+            <p>Total submissions: <strong><%= results.length %></strong></p>
+            <% if (results.length > 0) { %>
+                <p>Average score: <strong><%= Math.round(results.reduce((sum, r) => sum + r.percentage, 0) / results.length) %>%</strong></p>
+            <% } %>
+        </div>
     </div>
-    
+
     <% if (results.length === 0) { %>
-        <div class="empty-state">
-            <p>No quiz submissions yet.</p>
+        <div class="text-center bg-white p-5 rounded shadow">
+            <h3>No quiz submissions yet</h3>
             <p>Generate a quiz and share it to see results here.</p>
-            <a href="/admin/dashboard" class="btn btn-primary">Go to Dashboard</a>
+            <a href="/admin/dashboard" class="btn btn-primary">🎯 Go to Dashboard</a>
+            <a href="/quiz" class="btn btn-outline" target="_blank">📝 Test Quiz</a>
         </div>
     <% } else { %>
+        <div class="results-controls">
+            <div>
+                <button onclick="toggleAllDetails()" class="btn btn-secondary btn-small" id="toggle-all-btn">👁️ Show All Details</button>
+                <button onclick="exportResults()" class="btn btn-outline btn-small">📊 Export CSV</button>
+            </div>
+            <div>
+                <select onchange="filterResults(this.value)" class="form-select">
+                    <option value="all">All Results</option>
+                    <option value="excellent">Excellent (70%+)</option>
+                    <option value="good">Good (50-69%)</option>
+                    <option value="poor">Needs Improvement (0-49%)</option>
+                </select>
+            </div>
+        </div>
+
         <div class="results-table-container">
             <table class="results-table">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Surname</th>
-                        <th>Score</th>
-                        <th>Percentage</th>
-                        <th>Date</th>
-                        <th>Actions</th>
+                        <th>👤 Name</th>
+                        <th>👤 Surname</th>
+                        <th>📊 Score</th>
+                        <th>📈 Percentage</th>
+                        <th>📅 Date</th>
+                        <th>🔍 Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% results.forEach(function(result, index) { %>
-                        <tr>
+                        <tr class="result-row" data-percentage="<%= result.percentage %>">
                             <td><%= index + 1 %></td>
                             <td><%= result.name %></td>
                             <td><%= result.surname %></td>
-                            <td><%= result.score %>/<%= result.total %></td>
-                            <td class="<%= result.percentage >= 70 ? 'good' : result.percentage >= 50 ? 'average' : 'poor' %>">
-                                <%= result.percentage %>%
-                            </td>
-                            <td><%= result.date.toLocaleString() %></td>
+                            <td><span class="score-badge"><%= result.score %>/<%= result.total %></span></td>
                             <td>
-                                <button class="btn btn-small" onclick="toggleDetails(<%= index %>)">
-                                    Details
-                                </button>
+                                <% let gradeClass = result.percentage >= 70 ? 'excellent' : (result.percentage >= 50 ? 'good' : 'poor'); %>
+                                <span class="percentage-badge <%= gradeClass %>"><%= Math.round(result.percentage) %>%</span>
+                            </td>
+                            <td><%= new Date(result.date).toLocaleString() %></td>
+                            <td>
+                                <button class="btn btn-small details-btn" onclick="toggleDetails(<%= index %>)" id="btn-<%= index %>">🔍 Details</button>
                             </td>
                         </tr>
-                        <tr id="details-<%= index %>" class="details-row" style="display: none;">
+                        <tr id="details-<%= index %>" class="details-row" style="display:none;">
                             <td colspan="7">
                                 <div class="detailed-results">
-                                    <h4>Detailed Results for <%= result.name %> <%= result.surname %></h4>
-                                    <div class="questions-grid">
-                                        <% result.detailedResults.forEach(function(detail) { %>
-                                            <div class="question-detail <%= detail.isCorrect ? 'correct' : 'incorrect' %>">
-                                                <div class="question-header">
-                                                    <span class="question-number">Q<%= detail.questionNumber %></span>
-                                                    <span class="status <%= detail.isCorrect ? 'correct' : 'incorrect' %>">
-                                                        <%= detail.isCorrect ? '✓ Correct' : '✗ Wrong' %>
-                                                    </span>
-                                                </div>
-                                                <div class="question-content">
-                                                    <p><strong>Word:</strong> <%= detail.word %></p>
-                                                    <p><strong>Question:</strong> <%= detail.question %></p>
-                                                    <p><strong>Student's answer:</strong> 
-                                                        <span class="<%= detail.isCorrect ? 'correct-answer' : 'wrong-answer' %>">
-                                                            <%= detail.userAnswer %>
-                                                        </span>
-                                                    </p>
-                                                    <% if (!detail.isCorrect) { %>
-                                                        <p><strong>Correct answer:</strong> 
-                                                            <span class="correct-answer"><%= detail.correctAnswer %></span>
-                                                        </p>
-                                                    <% } %>
-                                                </div>
-                                            </div>
-                                        <% }); %>
-                                    </div>
+                                    <h4>📋 Detailed Results for <%= result.name %> <%= result.surname %></h4>
+                                    <p><strong>Score:</strong> <%= result.score %>/<%= result.total %> (<%= Math.round(result.percentage) %>%)</p>
                                 </div>
                             </td>
                         </tr>
-                    <% }); %>
+                    <% }) %>
                 </tbody>
             </table>
         </div>
     <% } %>
 </div>
+
+<script>
+function toggleDetails(index) {
+    const detailsRow = document.getElementById('details-' + index);
+    const btn = document.getElementById('btn-' + index);
+    if (detailsRow.style.display === 'none') {
+        detailsRow.style.display = 'table-row';
+        btn.textContent = '🙈 Hide Details';
+    } else {
+        detailsRow.style.display = 'none';
+        btn.textContent = '🔍 Details';
+    }
+}
+
+function toggleAllDetails() {
+    const rows = document.querySelectorAll('.details-row');
+    const btn = document.getElementById('toggle-all-btn');
+    const showAll = btn.textContent.includes('Show');
+    rows.forEach(row => row.style.display = showAll ? 'table-row' : 'none');
+    btn.textContent = showAll ? '🙈 Hide All Details' : '👁️ Show All Details';
+}
+
+function filterResults(value) {
+    const rows = document.querySelectorAll('.result-row');
+    rows.forEach(row => {
+        const percentage = parseFloat(row.dataset.percentage);
+        let show = true;
+        if (value === 'excellent' && percentage < 70) show = false;
+        if (value === 'good' && (percentage < 50 || percentage >= 70)) show = false;
+        if (value === 'poor' && percentage >= 50) show = false;
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function exportResults() {
+    const rows = document.querySelectorAll('.results-table tbody tr.result-row');
+    let csv = 'Name,Surname,Score,Percentage,Date\n';
+    rows.forEach(row => {
+        const cols = row.querySelectorAll('td');
+        csv += `${cols[1].innerText},${cols[2].innerText},${cols[3].innerText},${cols[4].innerText},${cols[5].innerText}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quiz_results.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
