@@ -1,0 +1,50 @@
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number"><%= hasQuiz ? quizQuestionCount : 0 %></span>
+                <span class="stat-label">Questions</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number"><%= resultsCount %></span>
+                <span class="stat-label">Submissions</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-section">
+        <h3>Generate New Quiz</h3>
+        <form action="/admin/generate-quiz" method="POST" class="quiz-form">
+            <div class="form-group">
+                <label for="text">Enter text to generate quiz from:</label>
+                <textarea 
+                    id="text" 
+                    name="text" 
+                    rows="8" 
+                    placeholder="Enter at least 20 characters of text..."
+                    required
+                    minlength="20"
+                ></textarea>
+                <small>Minimum 20 characters required</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Quiz</button>
+        </form>
+    </div>
+    
+    <% if (hasQuiz) { %>
+        <div class="dashboard-section">
+            <h3>Current Quiz Status</h3>
+            <div class="quiz-status">
+                <p>✅ Quiz is ready with <%= quizQuestionCount %> questions</p>
+                <p>📝 Quiz URL: <a href="/quiz" target="_blank">/quiz</a></p>
+                <p>📊 Total submissions: <%= resultsCount %></p>
+            </div>
+        </div>
+    <% } %>
+    
+    <div class="dashboard-actions">
+        <a href="/admin/results" class="btn btn-secondary">View Results</a>
+        <a href="/quiz" class="btn btn-outline" target="_blank">Test Quiz</a>
+    </div>
+</div>

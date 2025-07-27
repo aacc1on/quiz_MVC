@@ -1,0 +1,46 @@
+// ====== views/quiz/index.ejs ======
+/*
+<div class="quiz-container">
+    <form action="/quiz/submit" method="POST" class="quiz-form">
+        <div class="quiz-header">
+            <h2>English Vocabulary Quiz</h2>
+            <p>Answer all questions and submit your results.</p>
+        </div>
+        
+        <div class="user-info">
+            <div class="form-group">
+                <label for="name">First Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="surname">Last Name</label>
+                <input type="text" id="surname" name="surname" required>
+            </div>
+        </div>
+
+        <div class="questions-container">
+            <% questions.forEach(function(question, index) { %>
+                <div class="quiz-question">
+                    <h3>Question <%= index + 1 %></h3>
+                    <p class="question-text"><strong><%= question.question %></strong></p>
+                    <div class="options">
+                        <% question.options.forEach(function(option) { %>
+                            <label class="option-label">
+                                <input 
+                                    type="radio" 
+                                    name="question_<%= index %>" 
+                                    value="<%= option %>" 
+                                    required
+                                >
+                                <span><%= option %></span>
+                            </label>
+                        <% }); %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-large">Submit Quiz</button>
+    </form>
+</div>
+*/

@@ -1,0 +1,82 @@
+<div class="results-container">
+    <div class="results-header">
+        <h2>Quiz Results</h2>
+        <p>Total submissions: <strong><%= results.length %></strong></p>
+    </div>
+    
+    <% if (results.length === 0) { %>
+        <div class="empty-state">
+            <p>No quiz submissions yet.</p>
+            <p>Generate a quiz and share it to see results here.</p>
+            <a href="/admin/dashboard" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+    <% } else { %>
+        <div class="results-table-container">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% results.forEach(function(result, index) { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= result.name %></td>
+                            <td><%= result.surname %></td>
+                            <td><%= result.score %>/<%= result.total %></td>
+                            <td class="<%= result.percentage >= 70 ? 'good' : result.percentage >= 50 ? 'average' : 'poor' %>">
+                                <%= result.percentage %>%
+                            </td>
+                            <td><%= result.date.toLocaleString() %></td>
+                            <td>
+                                <button class="btn btn-small" onclick="toggleDetails(<%= index %>)">
+                                    Details
+                                </button>
+                            </td>
+                        </tr>
+                        <tr id="details-<%= index %>" class="details-row" style="display: none;">
+                            <td colspan="7">
+                                <div class="detailed-results">
+                                    <h4>Detailed Results for <%= result.name %> <%= result.surname %></h4>
+                                    <div class="questions-grid">
+                                        <% result.detailedResults.forEach(function(detail) { %>
+                                            <div class="question-detail <%= detail.isCorrect ? 'correct' : 'incorrect' %>">
+                                                <div class="question-header">
+                                                    <span class="question-number">Q<%= detail.questionNumber %></span>
+                                                    <span class="status <%= detail.isCorrect ? 'correct' : 'incorrect' %>">
+                                                        <%= detail.isCorrect ? '✓ Correct' : '✗ Wrong' %>
+                                                    </span>
+                                                </div>
+                                                <div class="question-content">
+                                                    <p><strong>Word:</strong> <%= detail.word %></p>
+                                                    <p><strong>Question:</strong> <%= detail.question %></p>
+                                                    <p><strong>Student's answer:</strong> 
+                                                        <span class="<%= detail.isCorrect ? 'correct-answer' : 'wrong-answer' %>">
+                                                            <%= detail.userAnswer %>
+                                                        </span>
+                                                    </p>
+                                                    <% if (!detail.isCorrect) { %>
+                                                        <p><strong>Correct answer:</strong> 
+                                                            <span class="correct-answer"><%= detail.correctAnswer %></span>
+                                                        </p>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>

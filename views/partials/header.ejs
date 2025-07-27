@@ -1,0 +1,21 @@
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <h1 class="logo">
+                <a href="/">📚 English Quiz App</a>
+            </h1>
+            <nav class="nav">
+                <a href="/quiz" class="nav-link">Take Quiz</a>
+                <% if (isAdmin) { %>
+                    <a href="/admin/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/admin/results" class="nav-link">Results</a>
+                    <form action="/admin/logout" method="POST" style="display: inline;">
+                        <button type="submit" class="nav-link logout-btn">Logout</button>
+                    </form>
+                <% } else { %>
+                    <a href="/admin/login" class="nav-link">Admin</a>
+                <% } %>
+            </nav>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,76 @@
+// ====== views/quiz/result.ejs ======
+/*
+<div class="result-container">
+    <div class="result-header">
+        <h2>Quiz Completed!</h2>
+        <div class="user-info">
+            <p>Student: <strong><%= name %> <%= surname %></strong></p>
+        </div>
+    </div>
+    
+    <div class="score-section">
+        <div class="score-card">
+            <div class="score-main">
+                <span class="score-number"><%= score %></span>
+                <span class="score-total">/ <%= total %></span>
+            </div>
+            <div class="percentage <%= percentage >= 70 ? 'excellent' : percentage >= 50 ? 'good' : 'needs-improvement' %>">
+                <%= percentage %>%
+            </div>
+            <div class="score-message">
+                <% if (percentage >= 70) { %>
+                    <span class="message excellent">🎉 Excellent work!</span>
+                <% } else if (percentage >= 50) { %>
+                    <span class="message good">👍 Good effort!</span>
+                <% } else { %>
+                    <span class="message needs-improvement">📚 Keep studying!</span>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+    <% if (wrongAnswers.length > 0) { %>
+        <div class="wrong-answers-section">
+            <h3>Review Your Mistakes:</h3>
+            <div class="wrong-answers-list">
+                <% wrongAnswers.forEach(function(mistake) { %>
+                    <div class="wrong-answer-item">
+                        <div class="mistake-header">
+                            <h4>Question <%= mistake.questionNumber %></h4>
+                            <span class="word-badge"><%= mistake.word %></span>
+                        </div>
+                        <div class="mistake-content">
+                            <p class="question"><strong>Question:</strong> <%= mistake.question %></p>
+                            <p class="user-answer">
+                                <strong>Your answer:</strong> 
+                                <span class="wrong-answer"><%= mistake.userAnswer %></span>
+                            </p>
+                            <p class="correct-answer-line">
+                                <strong>Correct answer:</strong> 
+                                <span class="correct-answer"><%= mistake.correctAnswer %></span>
+                            </p>
+                            <div class="all-options">
+                                <strong>All options:</strong>
+                                <ul>
+                                    <% mistake.options.forEach(function(option) { %>
+                                        <li class="<%= option === mistake.correctAnswer ? 'correct-option' : option === mistake.userAnswer ? 'wrong-option' : '' %>">
+                                            <%= option %>
+                                            <% if (option === mistake.correctAnswer) { %> ✓<% } %>
+                                            <% if (option === mistake.userAnswer && option !== mistake.correctAnswer) { %> ✗<% } %>
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+    
+    <div class="result-actions">
+        <a href="/quiz" class="btn btn-primary">Take Quiz Again</a>
+        <a href="/" class="btn btn-secondary">Go Home</a>
+    </div>
+</div>
+*/
