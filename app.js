@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
-const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 require('dotenv').config();
 
@@ -12,12 +11,6 @@ const app = express();
 // ====== VIEW ENGINE SETUP ======
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// Layout configuration
-app.use(expressLayouts);
-app.set('layout', 'layouts/main');
-app.set('layout extractScripts', true);
-app.set('layout extractStyles', true);
 
 // ====== MIDDLEWARE ======
 app.use(express.static(path.join(__dirname, 'public')));
@@ -60,8 +53,7 @@ app.use('/quiz', quizRoutes);
 // 404 handler
 app.use((req, res) => {
   res.status(404).render('404', { 
-    title: 'Page Not Found',
-    layout: 'layouts/main'
+    title: 'Page Not Found'
   });
 });
 
@@ -76,8 +68,7 @@ app.use((err, req, res, next) => {
     
   res.status(500).render('500', { 
     title: 'Server Error', 
-    error: errorMessage,
-    layout: 'layouts/main'
+    error: errorMessage
   });
 });
 
