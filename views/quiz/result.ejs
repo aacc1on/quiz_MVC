@@ -105,46 +105,55 @@
     <% } %>
     
     <div class="result-actions">
-        <a href="/quiz" class="btn btn-primary btn-large">
-            🔄 Take Quiz Again
-        </a>
-        <a href="/" class="btn btn-secondary btn-large">
-            🏠 Go Home
-        </a>
-        <button onclick="window.print()" class="btn btn-outline btn-large">
-            🖨️ Print Results
-        </button>
+        <a href="/quiz" class="btn btn-primary btn-large">🔄 Take Quiz Again</a>
+        <a href="/" class="btn btn-secondary btn-large">🏠 Go Home</a>
+        <button onclick="window.print()" class="btn btn-outline btn-large">🖨️ Print Results</button>
     </div>
 </div>
 
 <style>
 .result-container {
-    padding: 1rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f8fafc;
 }
 
 .result-header {
     text-align: center;
-    margin-bottom: 2rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin-bottom: 2.5rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, #6b46c1 0%, #4c51bf 100%);
     color: white;
     border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.5s ease;
+}
+
+.result-header:hover {
+    transform: translateY(-5px);
 }
 
 .result-header h2 {
-    margin: 0 0 1rem 0;
-    font-size: 2.5em;
+    margin: 0 0 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .user-info-result p {
     margin: 0.5rem 0;
-    font-size: 1.2em;
+    font-size: 1.25rem;
+    font-weight: 600;
     opacity: 0.9;
 }
 
 .completion-time {
-    font-size: 1em !important;
+    font-size: 1rem !important;
     opacity: 0.7 !important;
 }
 
@@ -158,20 +167,28 @@
     background: white;
     padding: 3rem;
     border-radius: 20px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     text-align: center;
-    border: 3px solid #f1f5f9;
-    max-width: 400px;
+    max-width: 450px;
     width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.score-card:hover {
+    transform: translateY(-5px);
 }
 
 .score-main {
     margin-bottom: 1.5rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .score-number {
-    font-size: 4rem;
-    font-weight: bold;
+    font-size: 4.5rem;
+    font-weight: 800;
     color: #1f2937;
 }
 
@@ -182,34 +199,35 @@
 }
 
 .percentage {
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 3.5rem;
+    font-weight: 700;
     margin-bottom: 1.5rem;
-    padding: 1rem;
-    border-radius: 15px;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    transition: all 0.3s ease;
 }
 
 .percentage.excellent {
     color: #059669;
-    background: rgba(5, 150, 105, 0.1);
-    border: 2px solid rgba(5, 150, 105, 0.3);
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.3);
 }
 
 .percentage.good {
-    color: #d97706;
-    background: rgba(217, 119, 6, 0.1);
-    border: 2px solid rgba(217, 119, 6, 0.3);
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.15);
+    border: 2px solid rgba(245, 158, 11, 0.3);
 }
 
 .percentage.needs-improvement {
     color: #dc2626;
-    background: rgba(220, 38, 38, 0.1);
-    border: 2px solid rgba(220, 38, 38, 0.3);
+    background: rgba(239, 68, 68, 0.15);
+    border: 2px solid rgba(239, 68, 68, 0.3);
 }
 
 .message {
     font-size: 1.3rem;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     border-radius: 12px;
     display: block;
     margin-bottom: 2rem;
@@ -217,26 +235,27 @@
 }
 
 .message.excellent {
-    background: rgba(5, 150, 105, 0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: #065f46;
-    border: 1px solid rgba(5, 150, 105, 0.3);
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .message.good {
-    background: rgba(217, 119, 6, 0.15);
+    background: rgba(245, 158, 11, 0.15);
     color: #92400e;
-    border: 1px solid rgba(217, 119, 6, 0.3);
+    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .message.needs-improvement {
-    background: rgba(220, 38, 38, 0.15);
+    background: rgba(239, 68, 68, 0.15);
     color: #991b1b;
-    border: 1px solid rgba(220, 38, 38, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .performance-stats {
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 2px solid #f1f5f9;
@@ -249,26 +268,29 @@
 .stat-number {
     display: block;
     font-size: 2rem;
-    font-weight: bold;
-    color: #4f46e5;
+    font-weight: 700;
+    color: #4c51bf;
 }
 
 .stat-label {
-    color: #6b7280;
-    font-size: 0.9rem;
+    color: #4b5563;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .wrong-answers-section {
     background: white;
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.5rem;
 }
 
 .wrong-answers-section h3 {
     margin-bottom: 1.5rem;
-    color: #374151;
+    color: #1f2937;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
 .wrong-answer-item {
@@ -277,6 +299,11 @@
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.wrong-answer-item:hover {
+    transform: translateY(-5px);
 }
 
 .mistake-header {
@@ -287,65 +314,73 @@
 }
 
 .word-badge {
-    background: #4f46e5;
+    background: linear-gradient(135deg, #6b46c1 0%, #4c51bf 100%);
     color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .question-block {
-    margin-bottom: 1rem;
-    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
     color: #374151;
 }
 
 .answer-comparison {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .user-answer .wrong-answer {
     color: #dc2626;
-    font-weight: bold;
+    font-weight: 600;
+    background: rgba(239, 68, 68, 0.15);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
 }
 
 .correct-answer-line .correct-answer {
     color: #059669;
-    font-weight: bold;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.15);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
 }
 
 .all-options {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 .options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.75rem;
-    margin-top: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
 }
 
 .option-item {
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
+    padding: 0.75rem;
+    border-radius: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
 .correct-option {
-    background: rgba(5, 150, 105, 0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: #065f46;
-    border: 1px solid rgba(5, 150, 105, 0.3);
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .wrong-option {
-    background: rgba(220, 38, 38, 0.15);
+    background: rgba(239, 68, 68, 0.15);
     color: #991b1b;
-    border: 1px solid rgba(220, 38, 38, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .neutral-option {
@@ -355,50 +390,68 @@
 }
 
 .option-letter {
-    font-weight: bold;
-    margin-right: 0.5rem;
+    font-weight: 700;
+    margin-right: 0.75rem;
+}
+
+.option-status {
+    margin-left: auto;
 }
 
 .perfect-score-section {
     text-align: center;
     background: #f0fdf4;
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: 16px;
     border: 2px solid #10b981;
     color: #065f46;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    animation: pulse 2s infinite;
+}
+
+.perfect-score-card h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.perfect-score-card p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
 }
 
 .celebration-emoji {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-top: 1rem;
 }
 
 .result-actions {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .btn {
-    display: inline-block;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
+    font-size: 1rem;
 }
 
 .btn-primary {
-    background: #4f46e5;
+    background: linear-gradient(135deg, #6b46c1 0%, #4c51bf 100%);
     color: white;
 }
 
 .btn-primary:hover {
-    background: #4338ca;
+    background: linear-gradient(135deg, #7c3aed 0%, #5a67d8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 81, 191, 0.3);
 }
 
 .btn-secondary {
@@ -408,21 +461,120 @@
 
 .btn-secondary:hover {
     background: #4b5563;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
 }
 
 .btn-outline {
     background: transparent;
-    border: 2px solid #4f46e5;
-    color: #4f46e5;
+    border: 2px solid #4c51bf;
+    color: #4c51bf;
 }
 
 .btn-outline:hover {
-    background: #4f46e5;
+    background: #4c51bf;
     color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 81, 191, 0.3);
 }
 
 .btn-large {
-    font-size: 1.1rem;
     padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 1024px) {
+    .result-container {
+        padding: 1.5rem;
+    }
+
+    .score-card {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .result-header {
+        padding: 1.5rem;
+    }
+
+    .result-header h2 {
+        font-size: 2rem;
+    }
+
+    .score-number {
+        font-size: 3.5rem;
+    }
+
+    .score-total {
+        font-size: 2.5rem;
+    }
+
+    .percentage {
+        font-size: 3rem;
+    }
+
+    .performance-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .answer-comparison {
+        grid-template-columns: 1fr;
+    }
+
+    .wrong-answers-section {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .result-container {
+        padding: 1rem;
+    }
+
+    .score-card {
+        padding: 1.5rem;
+    }
+
+    .score-number {
+        font-size: 3rem;
+    }
+
+    .score-total {
+        font-size: 2rem;
+    }
+
+    .percentage {
+        font-size: 2.5rem;
+    }
+
+    .message {
+        font-size: 1.1rem;
+    }
+
+    .wrong-answer-item {
+        padding: 1rem;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .btn-large {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
 }
 </style>

@@ -2,7 +2,7 @@
     <div class="empty-state">
         <div class="empty-icon">📝</div>
         <h2>No Quiz Available</h2>
-        <p>There is currently no quiz available. Please ask the administrator to create one.</p>
+        <p>Contact the administrator to create a new quiz and start testing your vocabulary.</p>
         <div class="empty-details">
             <div class="detail-item">
                 <span class="detail-icon">👨‍💼</span>
@@ -18,12 +18,8 @@
             </div>
         </div>
         <div class="action-buttons">
-            <a href="/admin/login" class="btn btn-primary">
-                🔐 Admin Panel
-            </a>
-            <a href="/" class="btn btn-secondary">
-                🏠 Go Home
-            </a>
+            <a href="/admin/login" class="btn btn-primary">🔐 Admin Panel</a>
+            <a href="/" class="btn btn-secondary">🏠 Go Home</a>
         </div>
     </div>
 </div>
@@ -33,35 +29,41 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 60vh;
+    min-height: 70vh;
     padding: 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f8fafc;
 }
 
 .empty-state {
     text-align: center;
-    max-width: 500px;
+    max-width: 600px;
+    width: 100%;
     padding: 3rem;
     background: white;
     border-radius: 20px;
-    border: 3px dashed #d1d5db;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 2px dashed #d1d5db;
+    animation: fadeIn 0.5s ease;
 }
 
 .empty-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.7;
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.6;
+    animation: pulse 2s infinite;
 }
 
 .empty-state h2 {
-    color: #374151;
+    color: #1f2937;
     margin-bottom: 1rem;
-    font-size: 2rem;
+    font-size: 2.25rem;
+    font-weight: 700;
 }
 
 .empty-state > p {
-    color: #6b7280;
-    font-size: 1.1rem;
+    color: #4b5563;
+    font-size: 1.2rem;
     margin-bottom: 2rem;
     line-height: 1.6;
 }
@@ -71,48 +73,136 @@
     padding: 1.5rem;
     background: #f8fafc;
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border-left: 4px solid #4c51bf;
 }
 
 .detail-item {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 1rem 0;
+    margin: 1.25rem 0;
     text-align: left;
-    color: #4b5563;
+    color: #374151;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .detail-icon {
-    font-size: 1.2rem;
-    margin-right: 0.75rem;
-    width: 1.5rem;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    width: 2rem;
     text-align: center;
+    color: #4c51bf;
 }
 
 .action-buttons {
     display: flex;
     gap: 1rem;
     justify-content: center;
+    flex-wrap: wrap;
     margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6b46c1 0%, #4c51bf 100%);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #5a67d8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 81, 191, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #4c51bf;
+    color: #4c51bf;
+}
+
+.btn-secondary:hover {
+    background: #4c51bf;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 81, 191, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 @media (max-width: 768px) {
     .no-quiz-container {
-        padding: 1rem;
-        min-height: 50vh;
+        padding: 1.5rem;
+        min-height: 60vh;
     }
-    
+
     .empty-state {
         padding: 2rem;
     }
-    
+
+    .empty-state h2 {
+        font-size: 1.75rem;
+    }
+
+    .empty-state > p {
+        font-size: 1.1rem;
+    }
+
+    .detail-item {
+        font-size: 0.95rem;
+    }
+
     .action-buttons {
         flex-direction: column;
     }
-    
+}
+
+@media (max-width: 480px) {
+    .no-quiz-container {
+        padding: 1rem;
+    }
+
+    .empty-state {
+        padding: 1.5rem;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+    }
+
     .empty-state h2 {
         font-size: 1.5rem;
+    }
+
+    .empty-details {
+        padding: 1rem;
+    }
+
+    .detail-item {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 }
 </style>

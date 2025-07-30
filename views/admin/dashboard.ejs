@@ -1,245 +1,268 @@
-<div class="admin-dashboard">
-    <div class="dashboard-header">
-        <h2>📊 Admin Dashboard</h2>
-        <div class="stats">
-            <div class="stat">
-                <span class="stat-number"><%= hasQuiz ? quizQuestionCount : 0 %></span>
-                <span class="stat-label">Questions</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number"><%= resultsCount %></span>
-                <span class="stat-label">Submissions</span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="dashboard-section">
-        <h3>🤖 Generate New Quiz</h3>
-        <form action="/admin/generate-quiz" method="POST" class="quiz-form">
-            <div class="form-group">
-                <label for="text">Enter text to generate quiz from:</label>
-                <textarea 
-                    id="text" 
-                    name="text" 
-                    rows="8" 
-                    placeholder="Enter at least 20 characters of text to generate vocabulary questions..."
-                    required
-                    minlength="20"
-                ></textarea>
-                <small>Minimum 20 characters required. The AI will analyze this text and create vocabulary questions.</small>
-            </div>
-            <button type="submit" class="btn btn-primary" id="generate-btn">
-                ✨ Generate Quiz
-            </button>
-        </form>
-    </div>
-    
-    <% if (hasQuiz) { %>
-        <div class="dashboard-section">
-            <h3>✅ Current Quiz Status</h3>
-            <div class="quiz-status">
-                <p>🎯 Quiz is ready with <strong><%= quizQuestionCount %></strong> questions</p>
-                <p>🔗 Quiz URL: <a href="/quiz" target="_blank" rel="noopener">Take Quiz</a></p>
-                <p>📊 Total submissions: <strong><%= resultsCount %></strong></p>
-            </div>
-        </div>
-    <% } else { %>
-        <div class="dashboard-section">
-            <h3>⚠️ No Quiz Available</h3>
-            <div class="quiz-status">
-                <p>📝 Generate a quiz using the form above</p>
-                <p>🤖 AI will create 10 vocabulary questions from your text</p>
-            </div>
-        </div>
-    <% } %>
-    
-    <div class="dashboard-actions">
-        <a href="/admin/results" class="btn btn-secondary">
-            📈 View Results
-        </a>
-        <% if (hasQuiz) { %>
-            <a href="/quiz" class="btn btn-outline" target="_blank" rel="noopener">
-                🧪 Test Quiz
-            </a>
-        <% } %>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      padding: 2rem;
+    }
 
-<style>
-.admin-dashboard {
-    padding: 1rem 0;
-}
+    .admin-dashboard {
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-.dashboard-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
+    .dashboard-header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
 
-.dashboard-header h2 {
-    margin: 0 0 1rem 0;
-    font-size: 2.2rem;
-}
+    .dashboard-header h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
 
-.stats {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 1rem;
-}
-
-.stat {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    text-align: center;
-    backdrop-filter: blur(10px);
-}
-
-.stat-number {
-    display: block;
-    font-size: 2rem;
-    font-weight: bold;
-    color: white;
-}
-
-.stat-label {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-}
-
-.dashboard-section {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: #f8fafc;
-    border-radius: 12px;
-    border: 2px solid #e5e7eb;
-}
-
-.dashboard-section h3 {
-    margin-top: 0;
-    color: #374151;
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-}
-
-.quiz-form .form-group {
-    margin-bottom: 1.5rem;
-}
-
-.quiz-form label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    color: #374151;
-}
-
-.quiz-form textarea {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 2px solid #d1d5db;
-    resize: vertical;
-    min-height: 120px;
-    font-family: inherit;
-    transition: border-color 0.2s;
-}
-
-.quiz-form textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.quiz-form small {
-    display: block;
-    margin-top: 0.5rem;
-    color: #6b7280;
-    font-size: 0.9rem;
-}
-
-.quiz-status {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-}
-
-.quiz-status p {
-    margin: 0.5rem 0;
-    color: #374151;
-    font-size: 1rem;
-}
-
-.quiz-status a {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.quiz-status a:hover {
-    text-decoration: underline;
-}
-
-.dashboard-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-}
-
-#generate-btn:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-}
-
-@media (max-width: 768px) {
     .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .dashboard-section {
+      background: #2b2b3c;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .dashboard-section h3 {
+      margin-top: 0;
+      color: #fff;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group label,
+    .form-group small {
+      color: #ddd;
+    }
+
+    .quiz-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background-color: #1e1e2f;
+      color: #fff;
+      resize: vertical;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    .quiz-form textarea:focus {
+      outline: none;
+      border-color: #7d5fff;
+      box-shadow: 0 0 0 3px rgba(125, 95, 255, 0.2);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: #7d5fff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #6a50e3;
+    }
+
+    .btn-secondary {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: #7d5fff;
+      border: 2px solid #7d5fff;
+    }
+
+    .btn-outline:hover {
+      background-color: #7d5fff;
+      color: white;
+    }
+
+    .quiz-status {
+      background-color: #1e1e2f;
+      padding: 1rem;
+      border: 1px solid #444;
+      border-radius: 10px;
+    }
+
+    .quiz-status p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .quiz-status a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .dashboard-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    #generate-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .stats {
         flex-direction: column;
         align-items: center;
-    }
-    
-    .dashboard-actions {
-        flex-direction: column;
-    }
-    
-    .dashboard-header h2 {
-        font-size: 1.8rem;
-    }
-}
-</style>
+      }
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const textarea = document.getElementById('text');
-    const generateBtn = document.getElementById('generate-btn');
-    
-    if (textarea && generateBtn) {
-        function updateButton() {
-            const textLength = textarea.value.trim().length;
-            if (textLength < 20) {
-                generateBtn.disabled = true;
-                generateBtn.textContent = `Need ${20 - textLength} more characters`;
-            } else {
-                generateBtn.disabled = false;
-                generateBtn.textContent = '✨ Generate Quiz';
-            }
-        }
-        
-        textarea.addEventListener('input', updateButton);
-        updateButton(); // Initial check
-        
-        // Form submission
-        const form = textarea.closest('form');
-        form.addEventListener('submit', function() {
-            generateBtn.disabled = true;
-            generateBtn.textContent = '🤖 Generating quiz...';
-        });
+      .dashboard-actions {
+        flex-direction: column;
+      }
     }
-});
-</script>
+  </style>
+</head>
+<body>
+  <div class="admin-dashboard">
+    <div class="dashboard-header">
+      <h2>📊 Admin Dashboard</h2>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-number"><%= hasQuiz ? quizQuestionCount : 0 %></span>
+          <span class="stat-label">Questions</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number"><%= resultsCount %></span>
+          <span class="stat-label">Submissions</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-section">
+      <h3>🤖 Generate New Quiz</h3>
+      <form action="/admin/generate-quiz" method="POST" class="quiz-form">
+        <div class="form-group">
+          <label for="text">Enter text to generate quiz from:</label>
+          <textarea 
+            id="text"
+            name="text"
+            rows="6"
+            placeholder="Enter at least 20 characters..."
+            required
+            minlength="20"
+          ></textarea>
+          <small>Minimum 20 characters required. AI will create vocabulary questions.</small>
+        </div>
+        <button type="submit" class="btn btn-primary" id="generate-btn">✨ Generate Quiz</button>
+      </form>
+    </div>
+
+    <% if (hasQuiz) { %>
+      <div class="dashboard-section">
+        <h3>✅ Current Quiz Status</h3>
+        <div class="quiz-status">
+          <p>🎯 Quiz is ready with <strong><%= quizQuestionCount %></strong> questions</p>
+          <p>🔗 Quiz URL: <a href="/quiz" target="_blank">Take Quiz</a></p>
+          <p>📊 Total submissions: <strong><%= resultsCount %></strong></p>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="dashboard-section">
+        <h3>⚠️ No Quiz Available</h3>
+        <div class="quiz-status">
+          <p>📝 Generate a quiz using the form above</p>
+          <p>🤖 AI will create 10 vocabulary questions from your text</p>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="dashboard-actions">
+      <a href="/admin/results" class="btn btn-secondary">📈 View Results</a>
+      <% if (hasQuiz) { %>
+        <a href="/quiz" class="btn btn-outline" target="_blank">🧪 Test Quiz</a>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const textarea = document.getElementById('text');
+      const generateBtn = document.getElementById('generate-btn');
+
+      function updateButton() {
+        const textLength = textarea.value.trim().length;
+        if (textLength < 20) {
+          generateBtn.disabled = true;
+          generateBtn.textContent = `Need ${20 - textLength} more characters`;
+        } else {
+          generateBtn.disabled = false;
+          generateBtn.textContent = '✨ Generate Quiz';
+        }
+      }
+
+      if (textarea && generateBtn) {
+        textarea.addEventListener('input', updateButton);
+        updateButton();
+
+        textarea.closest('form').addEventListener('submit', () => {
+          generateBtn.disabled = true;
+          generateBtn.textContent = '🤖 Generating quiz...';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
